@@ -75,7 +75,7 @@ export const SponsorSection: React.FC = () => {
               </h3>
 
               <p className="text-ink-muted text-sm md:text-base font-sans leading-relaxed font-medium">
-                Our headline sponsor will command primary keynote presentation privileges, mainstage nomenclature, and exclusive brand prominence across all 200+ participant workstations and live streams.
+                Our headline sponsor will command primary keynote presentation privileges, mainstage nomenclature, and exclusive brand prominence across all 500+ participant workstations and live streams.
               </p>
             </div>
 
@@ -164,13 +164,13 @@ export const SponsorSection: React.FC = () => {
               </h3>
 
               <p className="text-cream/80 text-sm md:text-base font-sans font-medium leading-relaxed max-w-2xl">
-                Place your developer tools, cloud infrastructure, robotics hardware, and engineering brand directly in front of the nation's top 200+ builders. Sponsor specialized track bounties, mentor aspiring prodigies, and scout exceptional talent early.
+                Place your developer tools, cloud infrastructure, robotics hardware, and engineering brand directly in front of the nation's top 500+ builders. Sponsor specialized track bounties, mentor aspiring prodigies, and scout exceptional talent early.
               </p>
 
               <div className="flex flex-wrap items-center gap-6 pt-2 font-mono text-xs text-cream/80">
                 <span className="flex items-center gap-2">
                   <Shield className="w-4 h-4 text-yellow" />
-                  <span>200+ High-Agency Builders</span>
+                  <span>500+ High-Agency Builders</span>
                 </span>
                 <span className="text-cream/30">•</span>
                 <span className="flex items-center gap-2">

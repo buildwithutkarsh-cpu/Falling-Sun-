@@ -83,7 +83,7 @@ const RegistrationLockModal: React.FC<{ show: boolean; onClose: () => void }> = 
                 <>
                   <div className="mb-6 p-4 bg-yellow border-2 border-ink text-center">
                     <p className="font-display text-lg font-black uppercase text-ink leading-snug">
-                      Only 200 participants will appear at venue
+                      500+ participants will appear at venue
                     </p>
                   </div>
                   <p className="text-center text-ink-muted text-sm mb-6 font-sans">
