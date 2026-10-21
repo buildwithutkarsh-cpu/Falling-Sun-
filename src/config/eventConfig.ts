@@ -328,6 +328,14 @@ export const eventConfig: EventConfig = {
       isPlaceholder: false,
     },
     {
+      id: "prakhar-piyush",
+      name: "Prakhar Piyush",
+      role: "Organizer",
+      bio: "Organizing event photography, documentation, and participant coordination.",
+      image: "/team/prakhar-piyush.png",
+      isPlaceholder: false,
+    },
+    {
       id: "divyansh",
       name: "Divyansh",
       role: "Organizer",
