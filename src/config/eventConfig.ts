@@ -371,6 +371,24 @@ export const eventConfig: EventConfig = {
       isPlaceholder: false,
       section: "college",
     },
+    {
+      id: "lakshay",
+      name: "Lakshay",
+      role: "College Organizer",
+      bio: "College Organizer managing campus participant relations, volunteer operations, and event logistics.",
+      image: "/team/lakshay.jpeg",
+      isPlaceholder: false,
+      section: "college",
+    },
+    {
+      id: "hemant",
+      name: "Hemant",
+      role: "College Organizer",
+      bio: "College Organizer coordinating on-site event flow, technical support, and student community engagement.",
+      image: "/team/hemant.jpeg",
+      isPlaceholder: false,
+      section: "college",
+    },
   ],
 
   faqs: [
