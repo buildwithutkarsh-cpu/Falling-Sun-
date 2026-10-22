@@ -4,7 +4,7 @@ import { SectionHeader } from '../components/common/SectionHeader';
 import { WhatsAppCTA } from '../components/common/WhatsAppCTA';
 import { Zap, Compass, Heart, ArrowUpRight } from 'lucide-react';
 import { eventConfig } from '../config/eventConfig';
-import { EVENT_DATE_LABEL } from '../data/event';
+import { EVENT_DATE_LABEL, EVENT_VENUE_LABEL, EVENT_TIMINGS_LABEL } from '../data/event';
 import { MagneticButton } from '../components/common/MagneticButton';
 import { MaskedReveal } from '../components/common/AnimatedText';
 import { useRegistrationLock } from '../components/common/RegistrationLockModal';
@@ -114,13 +114,15 @@ export const AboutPage: React.FC = () => {
             <div className="font-mono text-xs text-reddark font-bold tracking-widest uppercase">
               // WHY 12 HOURS + 12 HOURS?
             </div>
-            <div className="flex items-center gap-2 font-mono text-xs text-ink-muted">
+            <div className="flex flex-wrap items-center gap-2 font-mono text-xs text-ink-muted">
               <span className="px-2.5 py-1 bg-yellow border-2 border-ink font-bold text-ink tracking-widest">
                 {EVENT_DATE_LABEL}
               </span>
-              <span className="text-cream/40">•</span>
               <span className="px-2.5 py-1 bg-cream text-bg border-2 border-ink font-bold text-ink tracking-widest">
-                2 DAYS
+                {EVENT_VENUE_LABEL}
+              </span>
+              <span className="px-2.5 py-1 bg-yellow border-2 border-ink font-bold text-ink tracking-widest">
+                {EVENT_TIMINGS_LABEL}
               </span>
             </div>
           </div>

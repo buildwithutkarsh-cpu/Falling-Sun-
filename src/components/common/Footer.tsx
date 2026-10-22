@@ -172,7 +172,9 @@ export const Footer: React.FC = () => {
           <div>
             © {eventConfig.name} · HACKATHON · 2026. ALL RIGHTS RESERVED.
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <span>IMSEC GHAZIABAD</span>
+            <span>•</span>
             <span>{eventConfig.coordinates}</span>
             <span>•</span>
             <span className="text-yellow font-bold">{eventConfig.statusText}</span>

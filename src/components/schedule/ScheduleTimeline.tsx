@@ -3,7 +3,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { eventConfig } from '../../config/eventConfig';
 import { Clock, AlertCircle } from 'lucide-react';
 import { MagneticButton } from '../common/MagneticButton';
-import { EVENT_DATE_LABEL } from '../../data/event';
+import { EVENT_DATE_LABEL, EVENT_VENUE_LABEL, EVENT_TIMINGS_LABEL } from '../../data/event';
 
 export const ScheduleTimeline: React.FC = () => {
   const [activeDay, setActiveDay] = useState(0);
@@ -25,21 +25,24 @@ export const ScheduleTimeline: React.FC = () => {
           <div className="flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-yellow shrink-0 mt-0.5" />
             <div className="space-y-1">
-              <div className="font-mono text-xs font-bold text-yellow uppercase tracking-widest">
-                EVENT DATES
+              <div className="font-mono text-xs font-bold text-reddark uppercase tracking-widest">
+                EVENT DATES & VENUE
               </div>
               <p className="font-mono text-sm md:text-lg font-black text-ink">
-                {EVENT_DATE_LABEL}
+                {EVENT_DATE_LABEL} • {EVENT_VENUE_LABEL}
+              </p>
+              <p className="font-mono text-xs font-bold text-ink-muted">
+                TIMINGS: {EVENT_TIMINGS_LABEL}
               </p>
             </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
             <span className="px-3 py-1 bg-yellow border-2 border-ink font-bold text-ink tracking-widest">
-              DAY 01 — 24 OCTOBER 2026
+              DAY 01 — 25 OCTOBER 2026
             </span>
             <span className="px-3 py-1 bg-cream text-bg border-2 border-ink font-bold text-ink tracking-widest">
-              DAY 02 — 25 OCTOBER 2026
+              DAY 02 — 26 OCTOBER 2026
             </span>
           </div>
         </div>

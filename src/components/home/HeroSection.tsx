@@ -7,7 +7,7 @@ import { useRegistrationLock } from '../common/RegistrationLockModal';
 import { Stamp } from '../Stamp';
 import { Skewer } from '../Skewer';
 import { Sparkle } from '../Sparkle';
-import { EVENT_DATE_LABEL } from '../../data/event';
+import { EVENT_DATE_LABEL, EVENT_VENUE_LABEL, EVENT_TIMINGS_LABEL } from '../../data/event';
 
 export const HeroSection: React.FC = () => {
   const { open: openRegLock } = useRegistrationLock();
@@ -109,14 +109,22 @@ export const HeroSection: React.FC = () => {
               HACKATHON · GAME • WEB • ROBOTICS
             </span>
 
-            {/* Event date (single source: src/data/event.ts) */}
+            {/* Event date, venue & timings */}
             <div className="self-start space-y-2">
               <span className="font-mono text-[10px] text-cream/70 tracking-[0.2em] uppercase">
-                EVENT DATES
+                EVENT DATES & VENUE
               </span>
-              <span className="font-mono text-xl sm:text-2xl font-black text-yellow tracking-[0.15em] uppercase">
-                {EVENT_DATE_LABEL}
-              </span>
+              <div className="flex flex-wrap items-center gap-2.5">
+                <span className="font-mono text-xl sm:text-2xl font-black text-yellow tracking-[0.15em] uppercase">
+                  {EVENT_DATE_LABEL}
+                </span>
+                <span className="bg-cream text-ink text-xs font-bold px-2.5 py-1 border-2 border-ink -rotate-1 uppercase">
+                  {EVENT_VENUE_LABEL}
+                </span>
+                <span className="bg-yellow text-ink text-xs font-bold px-2.5 py-1 border-2 border-ink rotate-1 uppercase">
+                  {EVENT_TIMINGS_LABEL}
+                </span>
+              </div>
             </div>
 
             {/* Headline */}
@@ -153,7 +161,10 @@ export const HeroSection: React.FC = () => {
                 ZERO ENTRY FEE
               </span>
               <span className="bg-cream text-ink text-xs font-bold px-3 py-1 border-2 border-ink -rotate-1 uppercase">
-                EDITION // 2026 · 28°32'N 77°14'E · V2.6
+                IMSEC GHAZIABAD · 8 AM – 8 PM
+              </span>
+              <span className="bg-cream text-ink text-xs font-bold px-3 py-1 border-2 border-ink -rotate-1 uppercase">
+                EDITION // 2026 · {eventConfig.coordinates}
               </span>
             </div>
 

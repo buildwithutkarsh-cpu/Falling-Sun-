@@ -64,6 +64,8 @@ export interface EventConfig {
   edition: string;
   statusText: string;
   coordinates: string;
+  venue?: string;
+  timings?: string;
   whatsappUrl: string;
   instagramUrl?: string;
   registrationOpensAt: string;
