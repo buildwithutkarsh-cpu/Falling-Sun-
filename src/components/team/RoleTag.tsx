@@ -70,6 +70,12 @@ const getRoleTagStyle = (role: string): RoleTagStyle => {
         icon: <Sparkles className="w-2.5 h-2.5 text-current" />,
         className: 'bg-reddark text-cream border-ink',
       };
+    case 'College Organizer':
+      return {
+        label: 'COLLEGE ORG',
+        icon: <GraduationCap className="w-2.5 h-2.5 text-current" />,
+        className: 'bg-yellow text-ink border-ink',
+      };
     case 'Organizer':
       return {
         label: 'ORGANIZER',

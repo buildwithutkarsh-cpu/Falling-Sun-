@@ -353,6 +353,24 @@ export const eventConfig: EventConfig = {
       image: "/team/pulkit-kapur.jpeg",
       isPlaceholder: false,
     },
+    {
+      id: "naman",
+      name: "Naman",
+      role: "College Organizer",
+      bio: "College Organizer facilitating campus outreach, venue logistics, and student coordination.",
+      image: "/team/naman.jpeg",
+      isPlaceholder: false,
+      section: "college",
+    },
+    {
+      id: "kritagya",
+      name: "Kritagya",
+      role: "College Organizer",
+      bio: "College Organizer coordinating on-ground event management, participant support, and campus execution.",
+      image: "/team/kritagya.jpeg",
+      isPlaceholder: false,
+      section: "college",
+    },
   ],
 
   faqs: [

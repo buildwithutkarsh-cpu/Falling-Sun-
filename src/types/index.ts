@@ -46,7 +46,7 @@ export interface TeamMember {
     linkedin?: string;
   };
   isPlaceholder?: boolean;
-  section?: 'backbone' | 'team';
+  section?: 'backbone' | 'team' | 'college';
 }
 
 export interface FaqItem {

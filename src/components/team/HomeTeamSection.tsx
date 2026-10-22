@@ -1,13 +1,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, GraduationCap } from 'lucide-react';
 import { eventConfig } from '../../config/eventConfig';
 import { RoleTag } from './RoleTag';
 import { MemberPhoto } from './MemberPhoto';
 
 export const HomeTeamSection: React.FC = () => {
-  const organizers = eventConfig.team.filter((m) => m.section !== 'backbone');
+  const organizers = eventConfig.team.filter((m) => !m.section || m.section === 'team');
+  const collegeOrganizers = eventConfig.team.filter((m) => m.section === 'college');
   const facultyMembers = eventConfig.team.filter((m) => m.section === 'backbone');
 
   return (
@@ -90,7 +91,47 @@ export const HomeTeamSection: React.FC = () => {
           </div>
         </div>
 
-        {/* SECTION 2: EXECUTIVE & MENTORS (BOTTOM) */}
+        {/* SECTION 2: COLLEGE ORGANIZERS */}
+        {collegeOrganizers.length > 0 && (
+          <div className="space-y-4 pt-4">
+            <div className="flex items-center gap-3">
+              <span className="px-3 py-1 bg-yellow border-2 border-cream text-ink font-mono text-xs font-bold uppercase tracking-widest flex items-center gap-1.5">
+                <GraduationCap className="w-3.5 h-3.5 text-current" />
+                <span>COLLEGE ORGANIZERS</span>
+              </span>
+              <div className="flex-1 h-px bg-cream/20 border-t-2 border-dashed"></div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {collegeOrganizers.map((member, idx) => (
+                <motion.div
+                  key={member.id}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-20px' }}
+                  transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                  whileHover={{ y: -6 }}
+                  className="group relative overflow-hidden bg-cream border-2 border-ink shadow-card hover:shadow-[8px_8px_0_#1d1210] transition-all duration-300"
+                >
+                  <div className="relative aspect-[220/280] w-full overflow-hidden bg-ink">
+                    <MemberPhoto
+                      image={member.image}
+                      name={member.name}
+                      role={member.role}
+                      imgClassName="w-full h-full object-cover transform transition-transform duration-500 ease-out group-hover:scale-105"
+                    />
+
+                    <RoleTag role={member.role} />
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-30 transition-opacity duration-300 pointer-events-none" />
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* SECTION 3: EXECUTIVE & MENTORS (BOTTOM) */}
         {facultyMembers.length > 0 && (
           <div className="space-y-4 pt-4">
             <div className="flex items-center gap-3">

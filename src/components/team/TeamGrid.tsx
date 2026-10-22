@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { eventConfig } from '../../config/eventConfig';
-import { Shield, Sparkles, X, Info } from 'lucide-react';
+import { Shield, Sparkles, X, Info, GraduationCap } from 'lucide-react';
 import { WhatsAppCTA } from '../common/WhatsAppCTA';
 import { TeamMember } from '../../types';
 import { RoleTag } from './RoleTag';
@@ -10,7 +10,8 @@ import { MemberPhoto } from './MemberPhoto';
 export const TeamGrid: React.FC = () => {
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
 
-  const organizers = eventConfig.team.filter((m) => m.section !== 'backbone');
+  const organizers = eventConfig.team.filter((m) => !m.section || m.section === 'team');
+  const collegeOrganizers = eventConfig.team.filter((m) => m.section === 'college');
   const facultyMembers = eventConfig.team.filter((m) => m.section === 'backbone');
 
   return (
@@ -78,7 +79,57 @@ export const TeamGrid: React.FC = () => {
         </div>
       </div>
 
-      {/* SECTION 2: EXECUTIVE & MENTORS (BOTTOM) */}
+      {/* SECTION 2: COLLEGE ORGANIZERS */}
+      {collegeOrganizers.length > 0 && (
+        <div className="space-y-6 pt-4">
+          <div className="flex items-center gap-3">
+            <div className="px-3 py-1.5 bg-yellow border-2 border-ink text-ink font-mono text-xs font-bold uppercase tracking-widest flex items-center gap-2 shadow-[2px_2px_0_#1d1210]">
+              <GraduationCap className="w-4 h-4" />
+              <span>COLLEGE ORGANIZERS</span>
+            </div>
+            <div className="flex-1 h-px bg-ink/25 border-t-2 border-dashed"></div>
+            <span className="font-mono text-xs text-ink-muted uppercase tracking-widest font-semibold">CAMPUS LIAISON & STUDENT COORDINATION</span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {collegeOrganizers.map((member, idx) => (
+              <motion.div
+                key={member.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-30px' }}
+                transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                whileHover={{ y: -8 }}
+                onClick={() => setSelectedMember(member)}
+                className="group relative overflow-hidden bg-cream border-2 border-ink shadow-card hover:shadow-[8px_8px_0_#1d1210] transition-all duration-300 cursor-pointer flex flex-col"
+              >
+                <div className="relative aspect-[220/280] w-full overflow-hidden bg-ink">
+                  <MemberPhoto
+                    image={member.image}
+                    name={member.name}
+                    role={member.role}
+                    imgClassName="w-full h-full object-cover transform transition-transform duration-500 ease-out group-hover:scale-105"
+                  />
+                  <RoleTag role={member.role} />
+                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-start justify-end p-3">
+                    <span className="p-1.5 bg-cream border-2 border-ink text-ink text-xs">
+                      <Info className="w-3.5 h-3.5" />
+                    </span>
+                  </div>
+                </div>
+                <div className="p-4 bg-cream border-t-2 border-ink/20 flex items-center justify-between">
+                  <div>
+                    <p className="font-display text-sm font-bold text-ink">{member.name}</p>
+                    <p className="font-mono text-[11px] text-ink-muted">{member.role}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* SECTION 3: EXECUTIVE & MENTORS (BOTTOM) */}
       {facultyMembers.length > 0 && (
         <div className="space-y-6 pt-4">
           <div className="flex items-center gap-3">
