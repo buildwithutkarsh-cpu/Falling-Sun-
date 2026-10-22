@@ -29,13 +29,13 @@ export const SponsorSection: React.FC = () => {
               </span>
               <div className="hidden sm:block h-px w-12 bg-cream/30 border-t-2 border-dashed" />
               <span className="font-mono text-xs text-cream/70 uppercase tracking-widest font-bold">
-                HEADLINE &amp; FINANCIAL BACKERS
+                HEADLINE &amp; TITLE BACKERS
               </span>
             </div>
 
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-cream/10 border border-cream/30 text-cream font-mono text-xs tracking-wider">
               <CheckCircle2 className="w-3.5 h-3.5 text-green" />
-              <span>CONFIRMED CASH POOL &amp; HARDWARE</span>
+              <span>CONFIRMED PARTNERS &amp; HARDWARE</span>
             </div>
           </div>
 
@@ -58,11 +58,10 @@ export const SponsorSection: React.FC = () => {
                     <span className="px-2.5 py-1 bg-yellow border-2 border-ink font-mono text-[11px] font-black tracking-widest text-ink uppercase">
                       {sponsor.tier}
                     </span>
-                    {sponsor.amount && (
-                      <span className="px-3 py-1 bg-reddark border-2 border-ink font-mono text-xs font-black tracking-wider text-cream shadow-[2px_2px_0_#1d1210]">
-                        {sponsor.amount}
-                      </span>
-                    )}
+                    <span className="flex items-center gap-1.5 font-mono text-[10px] text-ink-muted uppercase font-bold">
+                      <span className="w-2 h-2 bg-green rounded-full animate-pulse" />
+                      <span>CONFIRMED</span>
+                    </span>
                   </div>
 
                   {/* Logo Container */}
