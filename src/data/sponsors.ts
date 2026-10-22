@@ -53,8 +53,8 @@ export const partnerSponsors: Sponsor[] = [
     tier: 'Partner',
     category: 'ARTIFICIAL INTELLIGENCE',
     tagline: 'ChatGPT Go for everyone + $20 gift cards for all winners.',
-    logo: '/sponsors/openai.svg',
-    logoBg: 'bg-cream text-ink',
+    logo: '/sponsors/openai_wordmark.svg',
+    logoBg: 'bg-white',
   },
   {
     id: 'github',
@@ -162,7 +162,7 @@ export const partnerSponsors: Sponsor[] = [
     category: 'NEON & CREATIVE DESIGN',
     tagline: 'Handcrafted neon aesthetic art and custom visual stage installations.',
     logo: '/sponsors/azka.png',
-    logoBg: 'bg-ink',
+    logoBg: 'bg-black',
   },
 ];
 
