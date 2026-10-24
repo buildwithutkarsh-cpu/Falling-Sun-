@@ -18,6 +18,7 @@ import { TracksPage } from './pages/TracksPage';
 import { SchedulePage } from './pages/SchedulePage';
 import { PrizesPage } from './pages/PrizesPage';
 import { TeamPage } from './pages/TeamPage';
+import { ProjectPage } from './pages/ProjectPage';
 import { FaqPage } from './pages/FaqPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { FormPage } from './pages/FormPage';
@@ -65,6 +66,14 @@ const AnimatedRoutes: React.FC = () => {
           element={
             <PageTransition>
               <PrizesPage />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/team/:id"
+          element={
+            <PageTransition>
+              <ProjectPage />
             </PageTransition>
           }
         />
