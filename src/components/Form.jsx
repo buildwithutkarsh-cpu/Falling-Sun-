@@ -144,6 +144,9 @@ function validate(v) {
   if (!v.description.trim()) e.description = 'Describe your project.';
   else if (v.description.trim().length > 2000) e.description = 'Description can be 2000 characters at most.';
   if (v.link.trim() && !/^https?:\/\//i.test(v.link.trim())) e.link = 'The link must start with http:// or https://.';
+  if (v.github.trim() && !/^https:\/\/github\.com\/[A-Za-z0-9-]+\/[A-Za-z0-9_.-]+\/?$/i.test(v.github.trim())) {
+    e.github = 'Enter a public GitHub repository URL (https://github.com/owner/repository).';
+  }
   if (v.members.some((m) => m.trim().length > 80)) e.members = 'Member names can be 80 characters at most.';
   if (v.skills.length !== SKILL_PICKS) e.skills = `Pick exactly ${SKILL_PICKS} skill tracks.`;
   if (!v.tool) e.tool = 'Pick a tool track.';
@@ -157,7 +160,7 @@ function FieldError({ id, children }) {
 
 function TeamForm({ config, token, onCreated, onUnauthorized }) {
   const [v, setV] = useState({
-    name: '', category: '', title: '', description: '', link: '', members: [''], skills: [], tool: '',
+    name: '', category: '', title: '', description: '', link: '', github: '', members: [''], skills: [], tool: '',
   });
   const [showErrors, setShowErrors] = useState(false);
   const [serverError, setServerError] = useState('');
@@ -198,6 +201,7 @@ function TeamForm({ config, token, onCreated, onUnauthorized }) {
           project_title: v.title.trim(),
           description: v.description.trim(),
           ...(v.link.trim() ? { link: v.link.trim() } : {}),
+          ...(v.github.trim() ? { github_url: v.github.trim() } : {}),
           members: v.members.map((m) => m.trim()).filter(Boolean).map((name) => ({ name })),
           skill_tracks: v.skills,
           tool: v.tool,
@@ -258,6 +262,12 @@ function TeamForm({ config, token, onCreated, onUnauthorized }) {
         <label htmlFor="fsf-link">Project link <span className="fsf-opt">(optional)</span></label>
         <input id="fsf-link" type="url" inputMode="url" placeholder="https://" value={v.link} onChange={set('link')} aria-invalid={!!err('link')} aria-describedby="fsf-link-e" />
         <FieldError id="fsf-link-e">{err('link')}</FieldError>
+      </div>
+
+      <div className="fsf-field">
+        <label htmlFor="fsf-github">Public GitHub repository <span className="fsf-opt">(optional)</span></label>
+        <input id="fsf-github" type="url" inputMode="url" placeholder="https://github.com/owner/repository" value={v.github} onChange={set('github')} aria-invalid={!!err('github')} aria-describedby="fsf-github-e" />
+        <FieldError id="fsf-github-e">{err('github')}</FieldError>
       </div>
 
       <fieldset className="fsf-set">

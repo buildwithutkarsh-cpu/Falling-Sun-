@@ -10,6 +10,7 @@ type Team = {
   project_title: string;
   description: string;
   link: string | null;
+  github_url: string | null;
   members: { name: string; role: string }[];
   tracks: { kind: string; track: string }[];
 };
@@ -17,7 +18,13 @@ type Team = {
 type ApiConfig = {
   SKILL_TRACKS: Record<string, string>;
   TOOLS: Record<string, string>;
+  CRITERIA: Record<string, string[]>;
 };
+
+type Voter = { id: string; name: string; role: string };
+
+const TOKEN_KEY = 'fs_token';
+const EMPTY_SCORES = [0, 0, 0, 0, 0];
 
 const categoryLabels: Record<string, string> = {
   game: 'Game Development',
@@ -36,6 +43,97 @@ export const ProjectPage: React.FC = () => {
   const [config, setConfig] = useState<ApiConfig | null>(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  const [showVote, setShowVote] = useState(false);
+  const [token, setToken] = useState(() => localStorage.getItem(TOKEN_KEY));
+  const [voter, setVoter] = useState<Voter | null>(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [scores, setScores] = useState(EMPTY_SCORES);
+  const [voteError, setVoteError] = useState('');
+  const [voteMessage, setVoteMessage] = useState('');
+  const [voteBusy, setVoteBusy] = useState(false);
+
+  async function apiRequest(path: string, options: { method?: string; body?: unknown; authToken?: string } = {}) {
+    const response = await fetch(`${API}${path}`, {
+      method: options.method || 'GET',
+      headers: {
+        ...(options.body ? { 'Content-Type': 'application/json' } : {}),
+        ...(options.authToken ? { Authorization: `Bearer ${options.authToken}` } : {}),
+      },
+      body: options.body ? JSON.stringify(options.body) : undefined,
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || `Request failed (${response.status}).`);
+    return data;
+  }
+
+  async function loadVoter(authToken: string, projectId: string) {
+    const { user } = await apiRequest('/api/auth/me', { authToken });
+    if (!['leader', 'jury'].includes(user.role)) throw new Error('Only team leaders and jury members can vote.');
+    setVoter(user);
+    const { votes } = await apiRequest('/api/votes/mine', { authToken });
+    const existingVote = votes.find((vote: { team_id: string; scores: number[] }) => vote.team_id === projectId);
+    setScores(existingVote ? existingVote.scores : EMPTY_SCORES);
+  }
+
+  async function openVoteForm() {
+    setShowVote((open) => !open);
+    setVoteError('');
+    setVoteMessage('');
+    if (!showVote && token && team) {
+      setVoteBusy(true);
+      try {
+        await loadVoter(token, team.id);
+      } catch (err) {
+        setVoteError(err instanceof Error ? err.message : 'Could not check your voting account.');
+        if (err instanceof Error && /token|login|required|expired/i.test(err.message)) {
+          localStorage.removeItem(TOKEN_KEY);
+          setToken(null);
+          setVoter(null);
+        }
+      } finally {
+        setVoteBusy(false);
+      }
+    }
+  }
+
+  async function login(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!team) return;
+    setVoteBusy(true);
+    setVoteError('');
+    setVoteMessage('');
+    try {
+      const data = await apiRequest('/api/auth/login', { method: 'POST', body: { email: email.trim(), password } });
+      localStorage.setItem(TOKEN_KEY, data.token);
+      setToken(data.token);
+      await loadVoter(data.token, team.id);
+    } catch (err) {
+      setVoteError(err instanceof Error ? err.message : 'Could not log in.');
+    } finally {
+      setVoteBusy(false);
+    }
+  }
+
+  async function submitVote(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!token || !team) return;
+    setVoteBusy(true);
+    setVoteError('');
+    setVoteMessage('');
+    try {
+      await apiRequest('/api/votes', {
+        method: 'POST',
+        authToken: token,
+        body: { team_id: team.id, scores },
+      });
+      setVoteMessage('Your project vote has been recorded.');
+    } catch (err) {
+      setVoteError(err instanceof Error ? err.message : 'Could not submit your vote.');
+    } finally {
+      setVoteBusy(false);
+    }
+  }
 
   useEffect(() => {
     if (!id) {
@@ -131,6 +229,16 @@ export const ProjectPage: React.FC = () => {
                 Visit project ↗
               </a>
             )}
+            {team.github_url && (
+              <a
+                className="mt-3 inline-flex border-2 border-ink bg-white px-5 py-3 font-display text-lg font-black uppercase shadow-[4px_4px_0_#1d1210] transition-transform hover:-translate-y-0.5"
+                href={team.github_url}
+                target="_blank"
+                rel="noreferrer"
+              >
+                View public GitHub repo ↗
+              </a>
+            )}
           </section>
 
           <aside className="space-y-6">
@@ -163,6 +271,76 @@ export const ProjectPage: React.FC = () => {
             )}
           </aside>
         </div>
+
+        <section className="mt-8 border-2 border-ink bg-yellow p-6 text-ink shadow-card sm:p-8">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <h2 className="font-display text-3xl font-black uppercase">Support this project</h2>
+              <p className="mt-2">Eligible team leaders and jury members can submit a project rating.</p>
+            </div>
+            <button
+              className="border-2 border-ink bg-bg px-6 py-3 font-display text-xl font-black uppercase text-cream shadow-[4px_4px_0_#1d1210] transition-transform hover:-translate-y-0.5 disabled:opacity-60"
+              type="button"
+              onClick={openVoteForm}
+              disabled={voteBusy}
+            >
+              {showVote ? 'Close voting' : 'Vote for this project'}
+            </button>
+          </div>
+
+          {showVote && (
+            <div className="mt-6 border-t-2 border-ink/20 pt-6">
+              {voteBusy && <p role="status">Checking your voting account…</p>}
+              {voteError && <p className="mb-4 border-2 border-reddark bg-white p-3 font-bold text-reddark" role="alert">{voteError}</p>}
+              {voteMessage && <p className="mb-4 border-2 border-ink bg-white p-3 font-bold" role="status">{voteMessage}</p>}
+              {!voter && !voteBusy && (
+                <form className="grid gap-4 sm:grid-cols-2" onSubmit={login}>
+                  <p className="sm:col-span-2">Log in with your team leader or jury account to vote. <a className="font-bold underline" href="/form">First-time account setup</a></p>
+                  <label className="grid gap-1 font-bold" htmlFor="project-vote-email">
+                    Email
+                    <input className="border-2 border-ink bg-white px-3 py-2 font-normal" id="project-vote-email" type="email" autoComplete="email" required value={email} onChange={(event) => setEmail(event.target.value)} />
+                  </label>
+                  <label className="grid gap-1 font-bold" htmlFor="project-vote-password">
+                    Password
+                    <input className="border-2 border-ink bg-white px-3 py-2 font-normal" id="project-vote-password" type="password" autoComplete="current-password" required value={password} onChange={(event) => setPassword(event.target.value)} />
+                  </label>
+                  <button className="w-fit border-2 border-ink bg-cream px-5 py-3 font-display text-lg font-black uppercase shadow-[3px_3px_0_#1d1210] disabled:opacity-60 sm:col-span-2" type="submit" disabled={voteBusy || !email || !password}>
+                    {voteBusy ? 'Please wait…' : 'Log in to vote'}
+                  </button>
+                </form>
+              )}
+              {voter && config?.CRITERIA?.[team.category] && (
+                <form className="space-y-4" onSubmit={submitVote}>
+                  <p className="font-bold">Voting as {voter.name} ({voter.role}). Choose a score from 0 to 5 for each criterion.</p>
+                  {config.CRITERIA[team.category].map((criterion, index) => (
+                    <label className="grid gap-2 sm:grid-cols-[1fr_auto] sm:items-center" key={criterion}>
+                      <span className="font-bold">{criterion}</span>
+                      <span className="flex items-center gap-3">
+                        <input
+                          aria-label={`${criterion} score`}
+                          className="accent-reddark"
+                          type="range"
+                          min="0"
+                          max="5"
+                          step="1"
+                          value={scores[index]}
+                          onChange={(event) => setScores((current) => current.map((score, scoreIndex) => scoreIndex === index ? Number(event.target.value) : score))}
+                        />
+                        <output className="w-5 text-center font-mono font-bold">{scores[index]}</output>
+                      </span>
+                    </label>
+                  ))}
+                  <button className="border-2 border-ink bg-bg px-5 py-3 font-display text-lg font-black uppercase text-cream shadow-[3px_3px_0_#1d1210] disabled:opacity-60" type="submit" disabled={voteBusy}>
+                    {voteBusy ? 'Submitting…' : 'Submit vote'}
+                  </button>
+                </form>
+              )}
+              {voter && !config?.CRITERIA?.[team.category] && (
+                <p role="alert">Voting criteria could not be loaded. Please close this panel and try again.</p>
+              )}
+            </div>
+          )}
+        </section>
       </div>
     </article>
   );
