@@ -327,7 +327,8 @@ function QrBlock({ teamId }) {
   return (
     <div className="fsf-qr">
       <img src={src} width="200" height="200" alt="QR code that opens your team page" />
-      <a href={src} target="_blank" rel="noreferrer">Open QR image</a>
+      <a className="fsf-btn fsf-btn--small fsf-btn--ghost" href={`${API}/api/teams/${teamId}/qr.png/download`}>Download PNG</a>
+      <a className="fsf-btn fsf-btn--small fsf-btn--ghost" href={`${API}/api/teams/${teamId}/qr.svg`}>Download SVG</a>
     </div>
   );
 }
